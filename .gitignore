@@ -1,2 +1,6 @@
+#ignore these
 node_modules/
 .DS_Store/
+
+#don't ignore these
+!dist/
