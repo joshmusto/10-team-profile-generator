@@ -7,63 +7,84 @@ const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 
 //main README write-up
-function writeMain(writeTitle, writeLicenseBadge, writeDesc, writeInstall, writeUsage, writeLicense, writeContribute, writeTests, writeGithub, writeEmail) { return 
+function writeStart() { return `<!doctype html>
+    <html>
 
-`<!doctype html>
-<html>
+        <head>
+            <title>Team Profile</title>
+            <meta charset="UTF-8" />
+            <meta name="description" content="Profiles for your team members">
+            <meta name="keywords" content="keywords for search engines">
+            <link rel="stylesheet" type="text/css" href="resetSrc.css">
+            <link rel="stylesheet" type="text/css" href="styleSrc.css" />
+        </head>
 
-    <head>
-        <title>Team Profile</title>
-        <meta charset="UTF-8" />
-        <meta name="description" content="Profiles for your team members">
-        <meta name="keywords" content="keywords for search engines">
-        <link rel="stylesheet" type="text/css" href="resetSrc.css">
-        <link rel="stylesheet" type="text/css" href="styleSrc.css" />
-    </head>
+        <body>
+        <header>
+            <h1>My Team</h1>
+        </header>
+        <section id="cardSection">
+        `
+}
 
-    <body>
-	<header>
-        <h1>My Team</h1>
-    </header>
-    <section id="cardSection">
-        <section class="memberCard" id="manager">
-            <section class="cardHeader">
-                <h2>Manager Name</h2>
-                <h3>Manager</h3>
-            </section>
-            <ul>
-                <li>ID: 1</li>
-                <li>Email: <a href="name@domain.com">name@domain.com</a></li>
-                <li>Office Number: 1</li>
-            </ul>
-        </section>
-        <section class="memberCard" id="engineer">
-            <section class="cardHeader">
-                <h2>Engineer Name</h2>
-                <h3>Engineer</h3>
-            </section>
-            <ul>
-                <li>ID: 2</li>
-                <li>Email: <a href="name@domain.com">name@domain.com</a></li>
-                <li>GitHub: <a href="github.com/username">username</a></li>
-            </ul>
-        </section>
-        <section class="memberCard" id="intern">
-            <section class="cardHeader">
-                <h2>Intern Name</h2>
-                <h3>Intern</h3>
-            </section>
-            <ul>
-                <li>ID: 3</li>
-                <li>Email: <a href="name@domain.com">name@domain.com</a></li>
-                <li>School: School School</li>
-            </ul>
-        </section>
+function writeManager(class) { return `<section class="memberCard" id="manager">
+    <section class="cardHeader">
+        <h2>${class.getName()}</h2>
+        <h3>Manager</h3>
     </section>
+    <ul>
+        <li>ID: ${class.getId()}</li>
+        <li>Email: <a href="${class.getEmail()}">${class.getEmail()}</a></li>
+        <li>Office Number: ${class.officeNumber}</li>
+    </ul>
+    </section>
+    `
+}
+
+function writeEngineer(class) { return
+    `<section class="memberCard" id="engineer">
+    <section class="cardHeader">
+        <h2>${class.getName()}</h2>
+        <h3>Engineer</h3>
+    </section>
+    <ul>
+        <li>ID: ${class.getId()}</li>
+        <li>Email: <a href="${class.getEmail()}">${class.getEmail()}</a></li>
+        <li>GitHub: <a href="https://github.com/${class.getGithub()}">${class.getGithub()}</a></li>
+    </ul>
+    </section>
+    `
+}
+        
+function writeIntern(class) { return
+    `<section class="memberCard" id="intern">
+    <section class="cardHeader">
+        <h2>${class.getName()}</h2>
+        <h3>Intern</h3>
+    </section>
+    <ul>
+        <li>ID: ${class.getId()}</li>
+        <li>Email: <a href="${class.getEmail()}">${class.getEmail()}</a></li>
+        <li>School: ${class.getSchool()}</li>
+    </ul>
+    </section>
+    `
+}
+        
+function writeEnd() { return `</section>
     </body>
 
 </html>`
 }
+
+function writeFull() { 
+    writeStart();
+
+    writeEnd();
+}
+
+//array of employees
+const employeeArray = [];
 
 //use inquirer to get info
 inquirer
@@ -110,22 +131,25 @@ inquirer
     let email = response.email;
     if (role === "Manager") {
         let officeNumber = response.officeNumber;
-        new Manager(name, id, email, officeNumber);
+        const addM = new Manager(name, id, email, officeNumber);
+        employeeArray.push(addM);
     }
     if (role === "Engineer") {
         
-        new Engineer();
+        const addE = new Engineer();
+        employeeArray.push(addE);
     }
     if (role === "Intern") {
         
-        new Intern();
+        const addI = new Intern();
+        employeeArray.push(addI);
     }
     if (response.again === "Yes") {
         //go again
     }
     else {
         // create and write file
-        // fs.writeFile(".dist/index.html", writeMain(writeTitle, writeLicenseBadge, writeDesc, writeInstall, writeUsage, writeLicense, writeContribute, writeTests, writeGithub, writeEmail), (err) =>
+        // fs.writeFile(".dist/index.html", writeStart(), (err) =>
         // err ? console.log(err) : console.log('README generation complete.'));
     }
   });
