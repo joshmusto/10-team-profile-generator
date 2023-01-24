@@ -25,47 +25,45 @@ function writeStart() { return `<!doctype html>
         </header>
         <section id="cardSection">
         `
-}
+} 
 
-function writeManager(class) { return `<section class="memberCard" id="manager">
+function writeManager(entry) { return `<section class="memberCard" id="manager">
     <section class="cardHeader">
-        <h2>${class.getName()}</h2>
+        <h2>${entry.getName()}</h2>
         <h3>Manager</h3>
     </section>
     <ul>
-        <li>ID: ${class.getId()}</li>
-        <li>Email: <a href="${class.getEmail()}">${class.getEmail()}</a></li>
-        <li>Office Number: ${class.officeNumber}</li>
+        <li>ID: ${entry.getId()}</li>
+        <li>Email: <a href="${entry.getEmail()}">${entry.getEmail()}</a></li>
+        <li>Office Number: ${entry.officeNumber}</li>
     </ul>
     </section>
     `
 }
 
-function writeEngineer(class) { return
-    `<section class="memberCard" id="engineer">
+function writeEngineer(entry) { return `<section class="memberCard" id="engineer">
     <section class="cardHeader">
-        <h2>${class.getName()}</h2>
+        <h2>${entry.getName()}</h2>
         <h3>Engineer</h3>
     </section>
     <ul>
-        <li>ID: ${class.getId()}</li>
-        <li>Email: <a href="${class.getEmail()}">${class.getEmail()}</a></li>
-        <li>GitHub: <a href="https://github.com/${class.getGithub()}">${class.getGithub()}</a></li>
+        <li>ID: ${entry.getId()}</li>
+        <li>Email: <a href="${entry.getEmail()}">${entry.getEmail()}</a></li>
+        <li>GitHub: <a href="https://github.com/${entry.getGithub()}">${entry.getGithub()}</a></li>
     </ul>
     </section>
     `
 }
         
-function writeIntern(class) { return
-    `<section class="memberCard" id="intern">
+function writeIntern(entry) { return `<section class="memberCard" id="intern">
     <section class="cardHeader">
-        <h2>${class.getName()}</h2>
+        <h2>${entry.getName()}</h2>
         <h3>Intern</h3>
     </section>
     <ul>
-        <li>ID: ${class.getId()}</li>
-        <li>Email: <a href="${class.getEmail()}">${class.getEmail()}</a></li>
-        <li>School: ${class.getSchool()}</li>
+        <li>ID: ${entry.getId()}</li>
+        <li>Email: <a href="${entry.getEmail()}">${entry.getEmail()}</a></li>
+        <li>School: ${entry.getSchool()}</li>
     </ul>
     </section>
     `
@@ -75,13 +73,7 @@ function writeEnd() { return `</section>
     </body>
 
 </html>`
-}
-
-function writeFull() { 
-    writeStart();
-
-    writeEnd();
-}
+} 
 
 //array of employees
 const employeeArray = [];
@@ -117,6 +109,18 @@ inquirer
         when: (answers) => answers.role === 'Manager',
     },
     {
+        type: 'input',
+        message: `What is the engineer's github username?`,
+        name: 'github',
+        when: (answers) => answers.role === 'Engineer',
+    },
+    {
+        type: 'input',
+        message: `What school is the intern from?`,
+        name: 'school',
+        when: (answers) => answers.role === 'Intern',
+    },
+    {
         type: 'list',
         message: 'Would you like to add another employee?',
         name: 'again',
@@ -135,21 +139,37 @@ inquirer
         employeeArray.push(addM);
     }
     if (role === "Engineer") {
-        
-        const addE = new Engineer();
+        let github = response.github;
+        const addE = new Engineer(name, id, email, github);
         employeeArray.push(addE);
     }
     if (role === "Intern") {
-        
-        const addI = new Intern();
+        let school = response.school;
+        const addI = new Intern(name, id, email, school);
         employeeArray.push(addI);
     }
     if (response.again === "Yes") {
         //go again
     }
     else {
-        // create and write file
-        // fs.writeFile(".dist/index.html", writeStart(), (err) =>
-        // err ? console.log(err) : console.log('README generation complete.'));
+        console.log(employeeArray);
+         //create and write file
+         //start
+         fs.writeFile("./dist/index.html", writeStart(), (err) =>
+         err ? console.log(err) : console.log('HTML writing has begun...'));
+         //employees
+         employeeArray.forEach(element => {
+            if (element==="Manager") {
+                fs.appendFile("./dist/index.html", writeManager(element), (err) => err ? console.log(err) : console.log(`Manager ${element.name} written...`)); 
+            }
+            else if (element==="Engineer") {
+                fs.appendFile("./dist/index.html", writeEngineer(element), (err) => err ? console.log(err) : console.log(`Engineer ${element.name} written...`)); 
+            }
+            else if (element==="intern") {
+                fs.appendFile("./dist/index.html", writeIntern(element), (err) => err ? console.log(err) : console.log(`Intern ${element.name} written...`)); 
+            }
+         })
+         //end
+         fs.appendFile("./dist/index.html", writeEnd(), (err) => err ? console.log(err) : console.log(`Generation complete! Enjoy your site!`));
     }
   });
