@@ -15,8 +15,8 @@ function writeStart() { return `<!doctype html>
             <meta charset="UTF-8" />
             <meta name="description" content="Profiles for your team members">
             <meta name="keywords" content="keywords for search engines">
-            <link rel="stylesheet" type="text/css" href="resetSrc.css">
-            <link rel="stylesheet" type="text/css" href="styleSrc.css" />
+            <link rel="stylesheet" type="text/css" href="reset.css">
+            <link rel="stylesheet" type="text/css" href="style.css" />
         </head>
 
         <body>
@@ -74,6 +74,168 @@ function writeEnd() { return `</section>
 
 </html>`
 } 
+
+function writeCSSMain() {
+    return `* {
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    
+    header {
+        text-align: center;
+        padding: 20px;
+        background-color: rgb(48, 104, 245);
+        margin: 0 0 20px 0;
+    }
+    
+    h1 {
+        font-size: 40px;
+        color: white;
+    }
+    h2 {
+        font-size: 30px;
+        color: white;
+        margin: 0 0 10px 0;
+    }
+    h3{
+        font-size: 20px;
+        color: white;
+    }
+    
+    #cardSection{
+        text-align: center;
+    }
+    
+    .memberCard {
+        display: inline-block;
+        text-align: left;
+        margin: 20px 10px 0 10px;
+        background-color: rgb(240, 250, 255);
+        box-shadow: 5px 5px 10px gray;
+    }
+    
+    .cardHeader{
+        padding: 20px;
+        background-color: rgb(48, 104, 245);
+    }
+    
+    .memberCard ul{
+        list-style: none;
+        background-color: white;
+        margin: 20px;
+    }
+    
+    .memberCard ul li{
+        padding: 10px;
+        border-style: solid;
+        border-color: rgb(48, 104, 245);
+        border-width: 1px;
+    }`
+}
+
+function writeCSSReset() {
+    return `/* 
+    html5doctor.com Reset Stylesheet
+    v1.6.1
+    Last Updated: 2010-09-17
+    Author: Richard Clark - http://richclarkdesign.com 
+    Twitter: @rich_clark
+    */
+    
+    html, body, div, span, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    abbr, address, cite, code,
+    del, dfn, em, img, ins, kbd, q, samp,
+    small, strong, sub, sup, var,
+    b, i,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, figcaption, figure, 
+    footer, header, hgroup, menu, nav, section, summary,
+    time, mark, audio, video {
+        margin:0;
+        padding:0;
+        border:0;
+        outline:0;
+        font-size:100%;
+        vertical-align:baseline;
+        background:transparent;
+    }
+    
+    body {
+        line-height:1;
+    }
+    
+    article,aside,details,figcaption,figure,
+    footer,header,hgroup,menu,nav,section { 
+        display:block;
+    }
+    
+    nav ul {
+        list-style:none;
+    }
+    
+    blockquote, q {
+        quotes:none;
+    }
+    
+    blockquote:before, blockquote:after,
+    q:before, q:after {
+        content:'';
+        content:none;
+    }
+    
+    a {
+        margin:0;
+        padding:0;
+        font-size:100%;
+        vertical-align:baseline;
+        background:transparent;
+    }
+    
+    /* change colours to suit your needs */
+    ins {
+        background-color:#ff9;
+        color:#000;
+        text-decoration:none;
+    }
+    
+    /* change colours to suit your needs */
+    mark {
+        background-color:#ff9;
+        color:#000; 
+        font-style:italic;
+        font-weight:bold;
+    }
+    
+    del {
+        text-decoration: line-through;
+    }
+    
+    abbr[title], dfn[title] {
+        border-bottom:1px dotted;
+        cursor:help;
+    }
+    
+    table {
+        border-collapse:collapse;
+        border-spacing:0;
+    }
+    
+    /* change border colour to suit your needs */
+    hr {
+        display:block;
+        height:1px;
+        border:0;   
+        border-top:1px solid #cccccc;
+        margin:1em 0;
+        padding:0;
+    }
+    
+    input, select {
+        vertical-align:middle;
+    }`
+}
 
 //array of employees
 const employeeArray = [];
@@ -137,17 +299,17 @@ function askQuestions() {
         if (role === "Manager") {
             let officeNumber = response.officeNumber;
             const addM = new Manager(name, id, email, officeNumber);
-            employeeArray.push(addM);
+            employeeArray.push(writeManager(addM));
         }
         if (role === "Engineer") {
             let github = response.github;
             const addE = new Engineer(name, id, email, github);
-            employeeArray.push(addE);
+            employeeArray.push(writeEngineer(addE));
         }
         if (role === "Intern") {
             let school = response.school;
             const addI = new Intern(name, id, email, school);
-            employeeArray.push(addI);
+            employeeArray.push(writeIntern(addI));
         }
         if (response.again === "Yes") {
             askQuestions();
@@ -155,24 +317,27 @@ function askQuestions() {
         else {
             console.log(employeeArray);
             //create and write file
-            //start
-            fs.writeFile("./dist/index.html", writeStart(), (err) =>
-            err ? console.log(err) : console.log('HTML writing has begun...'));
-            
-            //employees
-            employeeArray.forEach(element => {
-                if (element==="Manager") {
-                    fs.appendFile("./dist/index.html", writeManager(element), (err) => err ? console.log(err) : console.log(`Manager ${element.name} written...`)); 
+            function writeDoc1() {
+                fs.writeFile("dist/index.html", writeStart(), (err) =>
+                err ? console.log(err) : console.log('HTML writing has begun...'));
+                setTimeout(writeDoc2, 1000);
+            }
+            //employees function
+            function writeDoc2() {
+                for (let i = 0; i < employeeArray.length; i++) {
+                    fs.appendFile("dist/index.html", employeeArray[i], (err) => err ? console.log(err) : console.log(`Writing employee ${i+1} out of ${employeeArray.length}...`));
                 }
-                else if (element==="Engineer") {
-                    fs.appendFile("./dist/index.html", writeEngineer(element), (err) => err ? console.log(err) : console.log(`Engineer ${element.name} written...`)); 
-                }
-                else if (element==="intern") {
-                    fs.appendFile("./dist/index.html", writeIntern(element), (err) => err ? console.log(err) : console.log(`Intern ${element.name} written...`)); 
-                }
-            })
-            //end
-            fs.appendFile("./dist/index.html", writeEnd(), (err) => err ? console.log(err) : console.log(`Generation complete! Enjoy your site!`));
+                setTimeout(writeDoc3, 1000);
+            }
+            //end function
+            function writeDoc3() {
+                fs.appendFile("dist/index.html", writeEnd(), (err) => err ? console.log(err) : console.log(`Generation complete! Enjoy your site!`));
+            }
+            writeDoc1();
+            //write accompanying CSS
+            fs.writeFile("dist/style.css", writeCSSMain(), (err) => err ? console.log(err) : console.log("CSS stylehseet has been written."))
+            //write accompanying CSS
+            fs.writeFile("dist/reset.css", writeCSSReset(), (err) => err ? console.log(err) : console.log("CSS reset sheet has been written."))
         }
     })
 };
