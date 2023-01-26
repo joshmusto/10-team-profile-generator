@@ -1,13 +1,24 @@
 const Manager = require("../lib/Manager");
 
 describe("Set up a new Manager object", () => {
-    test("Given name, ID and email are set to variables within the object", () => {
-        //the test
-        //declare some kind of input const
-        const testEmployee = new Employee("Name", 1, "mail@email.com");
+    test("Given name, ID, email, and office number are set to variables within the object", () => {
+        //test object
+        const testManager = new Manager("Name", 1, "mail@email.com", 101);
 
-        //declare the expected output from the input with an output const
-        //expect(function(input)).toEqual(output);
-        expect(testEmployee.name).toBe("Name");
+        //test results
+        expect(testManager.name).toBe("Name");
+        expect(testManager.id).toBe(1);
+        expect(testManager.email).toBe("mail@email.com");
+        expect(testManager.officeNumber).toBe(101);
+    });
+    test("Object functions return as expected", () => {
+        //test object
+        const testManager = new Manager("Name", 1, "mail@email.com", 101);
+
+        //test results
+        expect(testManager.getName()).toBe("Name");
+        expect(testManager.getId()).toBe(1);
+        expect(testManager.getEmail()).toBe("mail@email.com");
+        expect(testManager.getRole()).toBe("Manager");
     });
 });

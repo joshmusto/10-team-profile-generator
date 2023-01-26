@@ -10,6 +10,7 @@ This program is used to generate a simple website that labels and keeps track of
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Test](#test)
 - [Credits](#credits)
 - [License](#license)
 - [Contribution](#contribution)
@@ -38,6 +39,10 @@ This program is used to generate a simple website that labels and keeps track of
 8. Enjoy your Team Profile website!
 
 ![screenshot of program in-use](src/screenshot.PNG)
+
+## Test
+
+Watch a demo of the program in-use [here](https://drive.google.com/file/d/1xkV4d3I8BL7dV0RVJJbtMv82_Rh4qJ8i/view?usp=sharing)
 
 ## Credits
 
