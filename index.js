@@ -34,7 +34,7 @@ function writeManager(entry) { return `<section class="memberCard" id="manager">
     </section>
     <ul>
         <li>ID: ${entry.getId()}</li>
-        <li>Email: <a href="${entry.getEmail()}">${entry.getEmail()}</a></li>
+        <li>Email: <a href="mailto:${entry.getEmail()}">${entry.getEmail()}</a></li>
         <li>Office Number: ${entry.officeNumber}</li>
     </ul>
     </section>
@@ -48,7 +48,7 @@ function writeEngineer(entry) { return `<section class="memberCard" id="engineer
     </section>
     <ul>
         <li>ID: ${entry.getId()}</li>
-        <li>Email: <a href="${entry.getEmail()}">${entry.getEmail()}</a></li>
+        <li>Email: <a href="mailto:${entry.getEmail()}">${entry.getEmail()}</a></li>
         <li>GitHub: <a href="https://github.com/${entry.getGithub()}">${entry.getGithub()}</a></li>
     </ul>
     </section>
@@ -62,7 +62,7 @@ function writeIntern(entry) { return `<section class="memberCard" id="intern">
     </section>
     <ul>
         <li>ID: ${entry.getId()}</li>
-        <li>Email: <a href="${entry.getEmail()}">${entry.getEmail()}</a></li>
+        <li>Email: <a href="mailto:${entry.getEmail()}">${entry.getEmail()}</a></li>
         <li>School: ${entry.getSchool()}</li>
     </ul>
     </section>
